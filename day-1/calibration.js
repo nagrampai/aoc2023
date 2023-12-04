@@ -1,4 +1,4 @@
-export const calibrationString = `eightqrssm9httwogqshfxninepnfrppfzhsc
+export const calibrationStrings = `eightqrssm9httwogqshfxninepnfrppfzhsc
 one111jxlmc7tvklrmhdpsix
 bptwone4sixzzppg
 ninezfzseveneight5kjrjvtfjqt5nineone

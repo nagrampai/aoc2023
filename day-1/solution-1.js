@@ -1,12 +1,12 @@
-import { calibrationString } from "./calibration.js";
+import { calibrationStrings } from "./calibration.js";
 
 // convert callibration string to array of strings
-const calibrationArray = calibrationString.split("\n");
+const calibrationArray = calibrationStrings.split("\n");
 
-function getFirstAndLastNumberWithinString ( string ) {
+function getFirstAndLastNumberWithinString ( calibrationString ) {
     const numbersInString = [];
 
-    for ( const char of string ) {
+    for ( const char of calibrationString ) {
         if ( !Number.isNaN( parseInt( char ) ) ) {
             numbersInString.push( parseInt( char ) );
         }
@@ -25,5 +25,5 @@ const calibrationArrayNumbers = calibrationArray.map ( getFirstAndLastNumberWith
 
 const answer =  calibrationArrayNumbers.reduce ( ( a, b ) => a + b, 0 );
 
-const answerElement = document.getElementById ( "result" );
-answerElement.innerHTML = `The answer is: ${ answer }`;
+const answerElement = document.getElementById ( "result-1" );
+answerElement.innerHTML = `The answer for part 1 is: ${ answer }`;
