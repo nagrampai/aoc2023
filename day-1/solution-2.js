@@ -1,9 +1,9 @@
 import { calibrationStrings } from "./calibration.js";
 
-//const calibrationArray = calibrationStrings.split("\n");
-const calibrationArray = ['eightqrssm9httwogqshfxninepnfrppfzhsc'];
+const calibrationArray =calibrationStrings.split("\n");
 
-function getFirstAndLastNumberWithinString ( calibrationString ) {
+
+function getFirstAndLastNumberWithinString ( argString ) {
     const numbersWordsMap = new Map(
         [
             [ 'zero', 0 ],
@@ -18,52 +18,58 @@ function getFirstAndLastNumberWithinString ( calibrationString ) {
             [ 'nine', 9 ]
          ]
     );
+    const numberKeys = Array.from( numbersWordsMap.keys() );
 
-    function startsWithNumberWord ( string ) {
-        for ( const key of numKeys ) {
-            if ( string.startsWith( key ) ) {
-                return key;
+    const numbersInString = []; 
+
+    function startsWithAnyNumberKey ( stringToCheck ) {
+        for ( const numberKey of numberKeys ) {
+            if ( stringToCheck.startsWith( numberKey ) ) {
+                return numberKey;
             }
         }
-        return false;
+        return null;
     }
-    
-    const numKeys = Array.from(numbersWordsMap.keys());
 
-    const numbersInString =[];
-
-    for ( const char of calibrationString ) {
-        if ( ! Number.isNaN( parseInt( char ) ) ) {
-            numbersInString.push( parseInt( char ) );
-            calibrationString = calibrationString.replace( char, '' );
-        } else if ( startsWithNumberWord( calibrationString ) ) {
-            const key = startsWithNumberWord( calibrationString );
-            numbersInString.push( numbersWordsMap.get( key ) );
-            console.log( numbersInString );
-            console.log( key );
-            calibrationString = calibrationString.replace( key, '' );
-        } else {
-            console.log( char );
-            calibrationString = calibrationString.replace( char, '' );
+    function getNumberOrCropString ( stringToCrop ){
+        if ( stringToCrop.length === 0 ) {
+            return;
         }
-        console.log( calibrationString );
+
+        if ( ! Number.isNaN( parseInt ( stringToCrop[0] ) ) ) { 
+            numbersInString.push( parseInt ( stringToCrop[0] ) );
+            getNumberOrCropString( stringToCrop.slice(1) );
+        } else if ( startsWithAnyNumberKey( stringToCrop ) ){
+            numbersInString.push( numbersWordsMap.get( startsWithAnyNumberKey( stringToCrop ) ) );
+            getNumberOrCropString( stringToCrop.slice(1) );
+        } else {
+            getNumberOrCropString( stringToCrop.slice(1) );
+        }
     }
 
+    getNumberOrCropString( argString );
+    
+    let finalNumber = 0;
     if ( numbersInString.length === 0 ) {
-        return 0;
+        //return 0;
+        finalNumber = 0;
     } else if ( numbersInString.length === 1 ) {
-        return numbersInString[0] * 11;
+        finalNumber =  numbersInString[0] * 11;
     } else {
-        return ( numbersInString[0] * 10 ) + numbersInString[ numbersInString.length - 1 ];
+        finalNumber =  ( numbersInString[0] * 10 ) + numbersInString[ numbersInString.length - 1 ];
     }
+    console.log( argString, numbersInString, finalNumber );
+
+    return finalNumber;
 }
 
-const calibrationArrayNumbers = calibrationArray.map ( getFirstAndLastNumberWithinString );
-console.log ( calibrationArrayNumbers );
+const calibrationArrayNumbers = calibrationArray.map( getFirstAndLastNumberWithinString );
+console.log( calibrationArrayNumbers );
 
+const answer = calibrationArrayNumbers.reduce( ( a, b ) => a + b, 0 ); 
+console.log(answer);
 
-const answer = calibrationArrayNumbers.reduce( ( a, b )=> a + b, 0);
-
-const answerDiv = document.getElementById( 'result-2' );
-
-answerDiv.innerHTML = `The answer for part 2 is ${answer}`;
+const answerElement = document.getElementById( "result-2" );
+if ( answerElement ) {
+    answerElement.innerHTML = `The answer for part 2 is: ${answer}`;
+}

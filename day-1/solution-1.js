@@ -3,7 +3,7 @@ import { calibrationStrings } from "./calibration.js";
 // convert callibration string to array of strings
 const calibrationArray = calibrationStrings.split("\n");
 
-function getFirstAndLastNumberWithinString ( calibrationString ) {
+function getFirstAndLastNumberWithinString ( calibrationString ){
     const numbersInString = [];
 
     for ( const char of calibrationString ) {
@@ -21,9 +21,11 @@ function getFirstAndLastNumberWithinString ( calibrationString ) {
     }
 }
 
-const calibrationArrayNumbers = calibrationArray.map ( getFirstAndLastNumberWithinString );
+const calibrationArrayNumbers = calibrationArray.map(getFirstAndLastNumberWithinString);
 
-const answer =  calibrationArrayNumbers.reduce ( ( a, b ) => a + b, 0 );
+const answer = calibrationArrayNumbers.reduce((a, b) => a + b, 0);
 
-const answerElement = document.getElementById ( "result-1" );
-answerElement.innerHTML = `The answer for part 1 is: ${ answer }`;
+const answerElement = document.getElementById("result-1");
+if (answerElement) {
+    answerElement.innerHTML = `The answer for part 1 is: ${answer}`;
+}
