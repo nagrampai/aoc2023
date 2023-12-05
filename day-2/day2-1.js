@@ -14,13 +14,12 @@ function findPossibleGameID( singleGame ){
     gamePlays = gamePlays.map( (x) => 
     x.split(",") ).flat().map( (x) => x.trim() );
 
-    console.log( gamePlays ); 
-
     const isPossibleGamePlay = gamePlays.every ( ( play ) => {
         const [ number, color ] = play.split(" ");
         return parseInt( number ) <= max[color];
     })
-     if ( isPossibleGamePlay ) {
+     
+    if ( isPossibleGamePlay ) {
         return gameID 
     } else {
         return 0;
@@ -28,7 +27,6 @@ function findPossibleGameID( singleGame ){
 }
 
 const possibleGameIDArray = gamesArray.map( (x) => findPossibleGameID( x ) );
-console.log( possibleGameIDArray );
 const answer = possibleGameIDArray.reduce( ( a, b ) => a + b, 0 );
 
 const answerElement = document.getElementById("part-1-result");
