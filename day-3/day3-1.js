@@ -4,60 +4,46 @@ const partNumbersInputArray = partNumbers.split( '\n' );
 
 // Is the character a number?
 function isNum( char ) {
-    return Number.isNaN( parseInt( char ) );
+    return ! Number.isNaN( parseInt( char ) );
 }
 
+// Is the character a symbol?
+function isSymbol( char ) {
+    // check if character is a symbol using regex
+    const symbolRegex = /[^a-zA-Z0-9]/;
+    return symbolRegex.test( char );
+}
 
-function getValidPartNumbers( partNumbersInputArray ) {
+// A function that takes a string and returns an array of number and its index in the string
+function getNumbersAndIndex( partNumbersString, rowNumber ) {
+    const numbersAndIndex = [];
+    let numArray = [];
     
-    // get complete number
-    // find row number above
-    // find row number below
-    // find if previous and next cells in same row are symbol, if yes push number as valid and move ahead
-    // in previous row find if there is a symbol in the range between ( first digit index - 1) and ( last digit index + 1)
-    // in next row find if there is a symbol in the range between ( first digit index - 1 ) and ( last digit index + 1 )
-    
-    // Array to collect all valid part numbers.
-    const validPartNumbers = [];
-    
-    // start scanning one row at a time.
-    for ( let rowNumber = 0; rowNumber < partNumbersInputArray.length; ++rowNumber ) {
-        
-        const currentRow = partNumbersInputArray[ rowNumber ];
+    for( let i = 0; i <= partNumbersString.length; ++i ){
+        const numberAndIndex = {
+            number: null,
+            index: null,
+            rowNumber: rowNumber,
+        }
+        // if character is a number
+        if ( isNum( partNumbersString[i] ) ) {
 
-        // Find the row before and after current row.
-        // const rowBefore = rowNumber ? rowNumber - 1 : 0;
-        // const rowAfter  = rowNumber === partNumbersInputArray.length - 1 ? 
-        //   rowNumber :
-         //   rowNumber + 1;
-        // const partNumberArray = [];
+           // if ( numberAndIndex[ 'index' ] === null ){
+            //    numberAndIndex[ 'index' ] = i;
+            //}
 
-        let index = 0;
-
-        while ( index < currentRow.length ){
-
-            const num = {
-                'numArray'  : [],
-                'startIndex': null,
-                'endIndex'  : null,
-            }
-        
-            if ( ! isNum( currentRow[ index ] ) ){
-                ++index;
-                continue;
-            } else {
-                num[ 'startIndex' ] = index;
-                num[ 'numArray' ].push( currentRow[ index ] );
-                while( index < currentRow.length && isNum( currentRow[ index + 1 ] ) ){
-                    ++index;
-                    num[ 'numArray' ].push( currentRow[ index ] );
-                }
-                num[ 'endIndex' ] = index;
-                const partNumber = num[ 'numArray' ].join('');
-                console.log( partNumber );
+            numArray.push( partNumbersString[i] );
+            
+            if( ! isNum( partNumbersString[ i + 1 ] ) ) {
+                numberAndIndex[ 'number' ] = parseInt( numArray.join( '' ) );
+                numberAndIndex[ 'index' ] = i - ( numArray.length - 1 );
+                numbersAndIndex.push( numberAndIndex );
+                numArray = [];
             }
         }
-    }
+    } // for loop
+
+    return numbersAndIndex;
 }
 
-getValidPartNumbers( partNumbersInputArray[0] );
+console.log( partNumbersInputArray.map( ( partNumbersString, index ) => getNumbersAndIndex( partNumbersString, index ) ) );
